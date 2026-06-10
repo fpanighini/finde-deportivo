@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finde Deportivo · 12–15 Junio 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,600;0,800;0,900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d1014; --bg2:#12161c; --card:#161c24; --card-hi:#1b2433; --line:#232b35;
+    --text:#ECE9DF; --muted:#8B95A2; --faint:#5b6470;
+    --futbol:#36D399; --nba:#FF7A3D; --ufc:#F0443E; --motor:#FFCB2D; --tenis:#C2F04E; --rugby:#B388FF; --cricket:#58B6F0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter',system-ui,sans-serif;
+    line-height:1.45;
+    background-image:radial-gradient(1200px 600px at 50% -10%, #181f2a 0%, transparent 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:clamp(20px,4vw,48px) clamp(16px,4vw,32px) 80px}
+
+  /* ---------- HERO ---------- */
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;font-weight:500;font-size:12px;
+    letter-spacing:.22em;color:var(--muted);text-transform:uppercase;
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  }
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--futbol);box-shadow:0 0 12px var(--futbol)}
+  h1{
+    font-family:'Archivo',sans-serif;font-weight:900;
+    font-size:clamp(44px,12vw,104px);line-height:.9;letter-spacing:-.02em;
+    text-transform:uppercase;margin:14px 0 0;
+    font-stretch:expanded;
+  }
+  h1 .b{display:block}
+  .lede{
+    margin-top:18px;max-width:46ch;color:var(--muted);font-size:clamp(15px,2.4vw,17px);
+  }
+  .lede em{color:var(--text);font-style:italic}
+  .meta-row{
+    margin-top:22px;padding-top:18px;border-top:1px solid var(--line);
+    display:flex;gap:24px;flex-wrap:wrap;font-size:13px;color:var(--muted);
+    font-family:'JetBrains Mono',monospace;
+  }
+  .meta-row b{color:var(--text);font-weight:700}
+
+  /* ---------- FILTERS ---------- */
+  .filters{margin:30px 0 8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .filters .lbl{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.15em;color:var(--faint);text-transform:uppercase;margin-right:4px}
+  .chip{
+    border:1px solid var(--line);background:transparent;color:var(--muted);
+    font-family:'Inter',sans-serif;font-weight:600;font-size:13px;
+    padding:7px 13px;border-radius:999px;cursor:pointer;transition:all .15s ease;
+    display:inline-flex;align-items:center;gap:7px;user-select:none;
+  }
+  .chip .sw{width:9px;height:9px;border-radius:50%;background:var(--c,#fff)}
+  .chip:hover{border-color:var(--faint);color:var(--text)}
+  .chip[aria-pressed="true"]{background:var(--card-hi);color:var(--text);border-color:transparent}
+
+  /* ---------- DAY ---------- */
+  .day{margin-top:40px}
+  .day-head{display:flex;align-items:baseline;gap:14px;margin-bottom:16px;flex-wrap:wrap}
+  .day-name{
+    font-family:'Archivo',sans-serif;font-weight:800;font-stretch:expanded;
+    font-size:clamp(22px,5vw,34px);text-transform:uppercase;letter-spacing:-.01em;
+  }
+  .day-date{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--futbol);letter-spacing:.05em}
+  .day-count{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--faint)}
+  .day-rule{height:1px;background:var(--line);margin-bottom:14px}
+
+  /* ---------- EVENT ---------- */
+  .ev{
+    background:var(--card);border:1px solid var(--line);border-left:4px solid var(--c,var(--line));
+    border-radius:12px;margin-bottom:10px;overflow:hidden;transition:border-color .12s ease;
+  }
+  .ev-row{
+    display:grid;grid-template-columns:78px 1fr auto 18px;gap:16px;align-items:center;
+    padding:14px 16px;cursor:pointer;width:100%;text-align:left;
+    background:none;border:0;color:inherit;font:inherit;
+  }
+  .ev-row:hover{background:rgba(255,255,255,.025)}
+  .ev.open{border-color:color-mix(in srgb, var(--c) 35%, var(--line))}
+  .ev .time{
+    font-family:'JetBrains Mono',monospace;font-weight:700;font-size:21px;color:var(--text);
+    letter-spacing:-.02em;line-height:1;
+  }
+  .ev .body{min-width:0;display:block}
+  .ev .title{font-weight:600;font-size:16px;letter-spacing:-.01em;display:block}
+  .ev .sub{color:var(--muted);font-size:13px;margin-top:3px;display:block}
+  .ev .sub .sep{color:var(--faint);margin:0 7px}
+  .tag{
+    font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--c,#fff);
+    border:1px solid color-mix(in srgb, var(--c) 40%, transparent);
+    background:color-mix(in srgb, var(--c) 12%, transparent);
+    padding:5px 9px;border-radius:6px;white-space:nowrap;
+  }
+  .chev{justify-self:end;color:var(--faint);transition:transform .2s ease;font-size:12px;line-height:1}
+  .ev.open .chev{transform:rotate(180deg);color:var(--c)}
+  /* details panel */
+  .det{display:none;padding:4px 16px 16px}
+  .ev.open .det{display:block}
+  .det .sec{margin-top:14px}
+  .det h4{
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--faint);font-weight:700;margin-bottom:6px;
+  }
+  .det p{font-size:13.5px;color:var(--text);opacity:.9;line-height:1.5}
+  .watch-btn{
+    display:inline-flex;align-items:center;gap:9px;text-decoration:none;
+    background:color-mix(in srgb, var(--c) 14%, transparent);
+    border:1px solid color-mix(in srgb, var(--c) 38%, transparent);
+    color:var(--text);font-weight:600;font-size:13.5px;padding:9px 13px;border-radius:9px;
+    transition:background .15s ease;
+  }
+  .watch-btn:hover{background:color-mix(in srgb, var(--c) 24%, transparent)}
+  .watch-btn .play{color:var(--c);font-size:11px}
+  .tipo{
+    font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:3px 6px;margin-left:2px;
+  }
+  .links{display:flex;flex-wrap:wrap;gap:8px}
+  .links a{
+    text-decoration:none;font-size:13px;color:var(--text);opacity:.85;
+    border:1px solid var(--line);border-radius:8px;padding:7px 11px;transition:all .15s ease;
+  }
+  .links a:hover{opacity:1;border-color:var(--faint)}
+  .links a::after{content:" ↗";color:var(--faint);font-size:11px}
+  .day[hidden],.ev[hidden]{display:none}
+
+  /* ---------- FOOTER ---------- */
+  .foot{margin-top:48px;border-top:1px solid var(--line);padding-top:22px}
+  .note{
+    background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+    font-size:14px;color:var(--muted);display:flex;gap:13px;align-items:flex-start;
+  }
+  .note .ic{color:var(--cricket);font-size:18px;line-height:1.2;flex:none}
+  .note b{color:var(--text);font-weight:600}
+  .sign{margin-top:18px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--faint);letter-spacing:.08em;text-transform:uppercase}
+
+  @media(max-width:560px){
+    .ev-row{grid-template-columns:58px 1fr 18px;row-gap:8px}
+    .ev-row .tag{grid-column:2;justify-self:start}
+    .ev .time{font-size:19px}
+    .chev{grid-row:1;grid-column:3}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow"><span class="dot"></span> 12–15 Junio 2026 · Hora de Argentina</div>
+    <h1><span class="b">Finde</span><span class="b">Deportivo</span></h1>
+    <p class="lede">Mundial, Final NBA, Topuria en la Casa Blanca, la F1 en Barcelona, Le Mans, Belgrano por el URBA Top 14 y la vuelta de Kyrgios al césped. <em>Para emocionarse y ponerse a llorar.</em> Todo lo que se juega de viernes a lunes, en un solo lugar.</p>
+    <div class="meta-row">
+      <span><b>14</b> partidos del Mundial</span>
+      <span><b>6</b> deportes</span>
+      <span><b>4</b> días sin respiro</span>
+    </div>
+  </header>
+
+  <div class="filters" id="filters">
+    <span class="lbl">Tocá para filtrar</span>
+    <button class="chip" data-sport="futbol" style="--c:var(--futbol)" aria-pressed="false"><span class="sw"></span>Fútbol</button>
+    <button class="chip" data-sport="nba"    style="--c:var(--nba)"    aria-pressed="false"><span class="sw"></span>NBA</button>
+    <button class="chip" data-sport="ufc"    style="--c:var(--ufc)"    aria-pressed="false"><span class="sw"></span>UFC</button>
+    <button class="chip" data-sport="motor"  style="--c:var(--motor)"  aria-pressed="false"><span class="sw"></span>Motor</button>
+    <button class="chip" data-sport="tenis"  style="--c:var(--tenis)"  aria-pressed="false"><span class="sw"></span>Tenis</button>
+    <button class="chip" data-sport="rugby"  style="--c:var(--rugby)"  aria-pressed="false"><span class="sw"></span>Rugby</button>
+  </div>
+
+  <main id="board"></main>
+
+  <div class="foot">
+    <p class="sign">Armado para el grupo · Horarios en ART (UTC−3) · Fuente: calendarios oficiales FIFA / NBA / UFC / ACO / ATP / SANZAAR</p>
+  </div>
+
+</div>
+
+<script>
+// Plataformas (Argentina). Los links abren la plataforma/sección; reproducir depende de tu suscripción.
+const W = {
+  mundial:{name:"DSports / DGO · Disney+ (ESPN)", url:"https://www.directvla.com/ar/mundial", tipo:"Suscripción", note:"Algunos cruces salen gratis por Telefé / TV Pública."},
+  disney:{name:"Disney+ (ESPN)", url:"https://www.disneyplus.com", tipo:"Suscripción"},
+  nba:{name:"Disney+ (ESPN) · NBA League Pass", url:"https://www.nba.com/tap-to-watch", tipo:"Suscripción"},
+  ufc:{name:"Paramount+", url:"https://www.paramountplus.com", tipo:"Suscripción"},
+  f1:{name:"Disney+ (ESPN) · Fox Sports", url:"https://www.disneyplus.com", tipo:"Suscripción"},
+  lemans:{name:"Fox Sports · FIAWEC+", url:"https://www.fiawec.com", tipo:"Suscripción"}
+};
+const L_WC = {label:"Fixture del Mundial", url:"https://www.espn.com/soccer/schedule/_/league/fifa.world"};
+const L_TEN = {label:"Cuadro y resultados", url:"https://www.espn.com/tennis/scoreboard"};
+const L_SR = {label:"Posiciones y fixture", url:"https://super.rugby"};
+
+const EVENTS = [
+  // ---- VIERNES 12 ----
+  {day:0, time:"04:05", sport:"rugby", title:"Chiefs vs Crusaders", comp:"Super Rugby Pacific · Semifinal", venue:"Hamilton, Nueva Zelanda", tag:"Rugby",
+    watch:W.disney, stakes:"Semifinal del Super Rugby. Los Crusaders defienden el título; el campeón 2026 saldrá entre cuatro equipos neozelandeses.", extra:"Semifinalistas: Hurricanes, Chiefs, Crusaders y Blues.", extraLabel:"La llave", links:[L_SR]},
+  {day:0, time:"16:00", sport:"futbol", title:"Canadá vs Bosnia y Herzegovina", comp:"Mundial · Grupo B", venue:"Toronto", tag:"Mundial",
+    watch:W.mundial, stakes:"Arranca el Grupo B. Canadá, coanfitrión, quiere debut ganador en casa.", extra:"Grupo B: Canadá, Bosnia y Herzegovina, Qatar, Suiza.", extraLabel:"El grupo", links:[L_WC]},
+  {day:0, time:"Día", sport:"tenis", title:"Cuartos de final · BOSS Open Stuttgart", comp:"ATP 250, césped", venue:"Stuttgart", tag:"Tenis",
+    watch:W.disney, stakes:"Gira de césped, antesala de Wimbledon. Kyrgios juega en césped por primera vez desde la final de Wimbledon 2022.", extra:"Cabezas de serie: Ben Shelton y Taylor Fritz. Kyrgios entró con wildcard.", extraLabel:"Cabezas de serie", links:[L_TEN]},
+  {day:0, time:"22:00", sport:"futbol", title:"Estados Unidos vs Paraguay", comp:"Mundial · Grupo D", venue:"SoFi Stadium, Los Ángeles", tag:"Mundial",
+    watch:W.mundial, stakes:"Debut del anfitrión Estados Unidos, ante un Paraguay siempre incómodo.", extra:"Grupo D: Estados Unidos, Paraguay, Australia, Turquía.", extraLabel:"El grupo", links:[L_WC]},
+
+  // ---- SÁBADO 13 ----
+  {day:1, time:"04:05", sport:"rugby", title:"Hurricanes vs Blues", comp:"Super Rugby Pacific · Semifinal", venue:"Wellington, Nueva Zelanda", tag:"Rugby",
+    watch:W.disney, stakes:"Segunda semi: los Hurricanes terminaron 1.º en la fase regular; los Blues entraron como 'lucky losers'.", extra:"Semifinalistas: Hurricanes, Chiefs, Crusaders y Blues.", extraLabel:"La llave", links:[L_SR]},
+  {day:1, time:"10:00", sport:"motor", title:"Clasificación · GP de Barcelona-Catalunya", comp:"Fórmula 1 · Ronda 7", venue:"Montmeló, España", tag:"F1",
+    watch:W.f1, stakes:"Define la grilla del domingo. Antonelli llega líder con un Mercedes dominante en 2026.", extra:"Ronda 7 de 24. Líder del campeonato: Kimi Antonelli (Mercedes).", extraLabel:"El campeonato", links:[{label:"Calendario y resultados F1", url:"https://www.formula1.com/en/racing/2026"}]},
+  {day:1, time:"11:00", sport:"motor", title:"Largada · 24 Horas de Le Mans", comp:"WEC · corre hasta el domingo 11:00", venue:"Circuit de la Sarthe", tag:"Motor",
+    watch:W.lemans, stakes:"Arrancan las 24 Horas. Ferrari va por su 4.º triunfo seguido; Genesis (Hyundai) debuta.", extra:"8 marcas en Hypercar: Ferrari, Toyota, Cadillac, BMW, Aston Martin, Alpine, Peugeot y Genesis.", extraLabel:"La parrilla", links:[{label:"Le Mans en vivo (FIA WEC)", url:"https://www.fiawec.com/en/race/24-hours-of-le-mans-2026"}]},
+  {day:1, time:"15:30", sport:"rugby", title:"Belgrano Athletic · URBA Top 14", comp:"Fecha 12 · rival a confirmar", venue:"Buenos Aires", tag:"Rugby",
+    watch:W.disney, stakes:"12.ª fecha del Top 14. Belgrano, finalista en 2024 y subcampeón en 2025, busca pelear arriba.", extra:"El rival y la hora exacta los confirma la URBA cada semana (suelen arrancar 15:00–15:30).", extraLabel:"Nota", links:[{label:"Fixture URBA Top 14", url:"https://fixture.urba.org.ar"}]},
+  {day:1, time:"16:00", sport:"futbol", title:"Qatar vs Suiza", comp:"Mundial · Grupo B", venue:"Santa Clara", tag:"Mundial",
+    watch:W.mundial, stakes:"Grupo B: Suiza, favorita, ante el campeón asiático Qatar.", extra:"Grupo B: Canadá, Bosnia y Herzegovina, Qatar, Suiza.", extraLabel:"El grupo", links:[L_WC]},
+  {day:1, time:"Día", sport:"tenis", title:"Semifinales · BOSS Open Stuttgart", comp:"ATP 250, césped", venue:"Stuttgart", tag:"Tenis",
+    watch:W.disney, stakes:"Semifinales en césped, rumbo a la final del domingo.", extra:"¿Sigue vivo Kyrgios? Cabezas de serie: Shelton y Fritz.", extraLabel:"Cabezas de serie", links:[L_TEN]},
+  {day:1, time:"19:00", sport:"futbol", title:"Brasil vs Marruecos", comp:"Mundial · Grupo C", venue:"MetLife Stadium, Nueva Jersey", tag:"Mundial",
+    watch:W.mundial, stakes:"Debut del Grupo C: Brasil, candidato, contra el Marruecos semifinalista de Qatar 2022.", extra:"Grupo C: Brasil, Marruecos, Haití, Escocia.", extraLabel:"El grupo", links:[L_WC]},
+  {day:1, time:"21:30", sport:"nba", title:"Knicks vs Spurs · Juego 5", comp:"Finales NBA · serie 2–1 (al mejor de 7)", venue:"San Antonio", tag:"NBA",
+    watch:W.nba, stakes:"Serie 2–1. Revancha de la final de 1999: Brunson y los Knicks vs Wembanyama y los Spurs.", extra:"Figuras: Jalen Brunson y Karl-Anthony Towns (NY) vs Victor Wembanyama (SA).", extraLabel:"Figuras", links:[{label:"NBA Finals (NBA.com)", url:"https://www.nba.com/playoffs/2026/nba-finals/schedule"}]},
+  {day:1, time:"22:00", sport:"futbol", title:"Haití vs Escocia", comp:"Mundial · Grupo C", venue:"Foxborough", tag:"Mundial",
+    watch:W.mundial, stakes:"Grupo C: pelea por no quedar atrás de Brasil.", extra:"Grupo C: Brasil, Marruecos, Haití, Escocia.", extraLabel:"El grupo", links:[L_WC]},
+  {day:1, time:"01:00", sport:"futbol", title:"Australia vs Turquía", comp:"Mundial · Grupo D · madrugada del domingo", venue:"Vancouver", tag:"Mundial",
+    watch:W.mundial, stakes:"Cierre del Grupo D, ya en la madrugada argentina.", extra:"Grupo D: Estados Unidos, Paraguay, Australia, Turquía.", extraLabel:"El grupo", links:[L_WC]},
+
+  // ---- DOMINGO 14 ----
+  {day:2, time:"09:00", sport:"motor", title:"Carrera · GP de Barcelona-Catalunya", comp:"Fórmula 1 · Ronda 7", venue:"Montmeló, España", tag:"F1",
+    watch:W.f1, stakes:"La carrera, Ronda 7. Antonelli puede estirar su ventaja en el campeonato.", extra:"68–70 vueltas al Circuit de Barcelona-Catalunya. Líder: Antonelli (Mercedes).", extraLabel:"El campeonato", links:[{label:"Calendario y resultados F1", url:"https://www.formula1.com/en/racing/2026"}]},
+  {day:2, time:"11:00", sport:"motor", title:"Bandera a cuadros · Le Mans", comp:"Final de las 24 Horas", venue:"Circuit de la Sarthe", tag:"Motor",
+    watch:W.lemans, stakes:"Bandera a cuadros tras 24 horas: se define el ganador absoluto.", extra:"Ferrari ganó las últimas tres ediciones (2024, 2025 y 2023).", extraLabel:"Antecedentes", links:[{label:"Le Mans en vivo (FIA WEC)", url:"https://www.fiawec.com/en/race/24-hours-of-le-mans-2026"}]},
+  {day:2, time:"14:00", sport:"futbol", title:"Alemania vs Curazao", comp:"Mundial · Grupo E", venue:"Houston", tag:"Mundial",
+    watch:W.mundial, stakes:"Grupo E: Alemania, candidata, ante el debutante más chico del Mundial.", extra:"Grupo E: Alemania, Curazao, Costa de Marfil, Ecuador.", extraLabel:"El grupo", links:[L_WC]},
+  {day:2, time:"Día", sport:"tenis", title:"FINAL · BOSS Open Stuttgart", comp:"ATP 250, césped", venue:"Stuttgart", tag:"Tenis",
+    watch:W.disney, stakes:"Final del BOSS Open en césped.", extra:"¿Llega Kyrgios a la final en su vuelta al circuito?", extraLabel:"La historia", links:[L_TEN]},
+  {day:2, time:"17:00", sport:"futbol", title:"Países Bajos vs Japón", comp:"Mundial · Grupo F", venue:"Arlington", tag:"Mundial",
+    watch:W.mundial, stakes:"Grupo F: dos selecciones de ataque vistoso.", extra:"Grupo F: Países Bajos, Japón, Suecia, Túnez.", extraLabel:"El grupo", links:[L_WC]},
+  {day:2, time:"20:00", sport:"futbol", title:"Costa de Marfil vs Ecuador", comp:"Mundial · Grupo E", venue:"Filadelfia", tag:"Mundial",
+    watch:W.mundial, stakes:"Grupo E: choque parejo por el segundo puesto.", extra:"Grupo E: Alemania, Curazao, Costa de Marfil, Ecuador.", extraLabel:"El grupo", links:[L_WC]},
+  {day:2, time:"21:00", sport:"ufc", title:"Topuria vs Gaethje · UFC Freedom 250", comp:"En la Casa Blanca", venue:"Washington D.C.", tag:"UFC",
+    watch:W.ufc, stakes:"Topuria defiende el título ligero y puede quedar como bicampeón indiscutido; de co-main, Pereira vs Gane por el interino pesado. Histórico: en la Casa Blanca.", extra:"Cartelera: Topuria-Gaethje · Pereira-Gane · O'Malley-Zahabi · Lewis-Hokit · Chandler-Ruffy · Nickal-Daukaus · Lopes-Garcia.", extraLabel:"Cartelera completa", links:[{label:"Cartelera y cobertura", url:"https://www.espn.com/mma/fightcenter/_/id/600058854/league/ufc"}]},
+  {day:2, time:"23:00", sport:"futbol", title:"Suecia vs Túnez", comp:"Mundial · Grupo F", venue:"Monterrey", tag:"Mundial",
+    watch:W.mundial, stakes:"Grupo F: cierre de la jornada.", extra:"Grupo F: Países Bajos, Japón, Suecia, Túnez.", extraLabel:"El grupo", links:[L_WC]},
+
+  // ---- LUNES 15 ----
+  {day:3, time:"13:00", sport:"futbol", title:"España vs Cabo Verde", comp:"Mundial · Grupo H", venue:"Atlanta", tag:"Mundial",
+    watch:W.mundial, stakes:"Grupo H: España, la mejor ranqueada del torneo, hace su debut.", extra:"Grupo H: España, Cabo Verde, Arabia Saudita, Uruguay.", extraLabel:"El grupo", links:[L_WC]},
+  {day:3, time:"16:00", sport:"futbol", title:"Bélgica vs Egipto", comp:"Mundial · Grupo G", venue:"Seattle", tag:"Mundial",
+    watch:W.mundial, stakes:"Grupo G: Bélgica ante el Egipto de Salah.", extra:"Grupo G: Bélgica, Egipto, Irán, Nueva Zelanda.", extraLabel:"El grupo", links:[L_WC]},
+  {day:3, time:"19:00", sport:"futbol", title:"Arabia Saudita vs Uruguay", comp:"Mundial · Grupo H", venue:"Miami", tag:"Mundial",
+    watch:W.mundial, stakes:"Grupo H: Uruguay arranca su Mundial, con todo el interés rioplatense.", extra:"Grupo H: España, Cabo Verde, Arabia Saudita, Uruguay.", extraLabel:"El grupo", links:[L_WC]},
+  {day:3, time:"22:00", sport:"futbol", title:"Irán vs Nueva Zelanda", comp:"Mundial · Grupo G", venue:"Los Ángeles", tag:"Mundial",
+    watch:W.mundial, stakes:"Grupo G: cierre de la jornada del lunes.", extra:"Grupo G: Bélgica, Egipto, Irán, Nueva Zelanda.", extraLabel:"El grupo", links:[L_WC]},
+];
+
+const DAYS = [
+  {name:"Viernes", date:"12 JUN"},
+  {name:"Sábado",  date:"13 JUN"},
+  {name:"Domingo", date:"14 JUN"},
+  {name:"Lunes",   date:"15 JUN"},
+];
+
+const board = document.getElementById('board');
+
+function detailsHTML(e){
+  let h = '';
+  if(e.watch){
+    h += `<div class="sec"><h4>Dónde verlo</h4>`
+       + `<a class="watch-btn" href="${e.watch.url}" target="_blank" rel="noopener">`
+       + `<span class="play">▶</span>${e.watch.name}<span class="tipo">${e.watch.tipo}</span></a>`;
+    if(e.watch.note) h += `<p style="margin-top:8px">${e.watch.note}</p>`;
+    h += `</div>`;
+  }
+  if(e.stakes) h += `<div class="sec"><h4>Qué está en juego</h4><p>${e.stakes}</p></div>`;
+  if(e.extra)  h += `<div class="sec"><h4>${e.extraLabel || 'Detalle'}</h4><p>${e.extra}</p></div>`;
+  if(e.links && e.links.length){
+    h += `<div class="sec"><h4>Ver más</h4><div class="links">`
+       + e.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener">${l.label}</a>`).join('')
+       + `</div></div>`;
+  }
+  return h;
+}
+
+DAYS.forEach((d, di) => {
+  const sec = document.createElement('section');
+  sec.className = 'day';
+  sec.dataset.day = di;
+  const evs = EVENTS.filter(e => e.day === di);
+  sec.innerHTML = `
+    <div class="day-head">
+      <span class="day-name">${d.name}</span>
+      <span class="day-date">${d.date}</span>
+      <span class="day-count">${evs.length} eventos</span>
+    </div>
+    <div class="day-rule"></div>
+    ${evs.map(e => `
+      <div class="ev" data-sport="${e.sport}" style="--c:var(--${e.sport})">
+        <button class="ev-row" aria-expanded="false">
+          <span class="time">${e.time}</span>
+          <span class="body">
+            <span class="title">${e.title}</span>
+            <span class="sub">${e.comp}<span class="sep">·</span>${e.venue}</span>
+          </span>
+          <span class="tag">${e.tag}</span>
+          <span class="chev">▼</span>
+        </button>
+        <div class="det">${detailsHTML(e)}</div>
+      </div>`).join('')}
+  `;
+  board.appendChild(sec);
+});
+
+// expand / collapse on click
+board.addEventListener('click', ev => {
+  const row = ev.target.closest('.ev-row');
+  if(!row) return;
+  const card = row.closest('.ev');
+  const open = card.classList.toggle('open');
+  row.setAttribute('aria-expanded', open ? 'true' : 'false');
+});
+
+// ---- Filtering ----
+// Empty selection = show everything. Clicking a sport narrows the board to
+// the selected sport(s); click again to deselect. No selection means no filter.
+const active = new Set();
+
+function apply(){
+  const filtering = active.size > 0;
+  document.querySelectorAll('.day').forEach(sec => {
+    let shown = 0;
+    sec.querySelectorAll('.ev').forEach(ev => {
+      const ok = !filtering || active.has(ev.dataset.sport);
+      ev.hidden = !ok;
+      if(ok) shown++;
+    });
+    sec.hidden = shown === 0;
+    const c = sec.querySelector('.day-count');
+    if(c) c.textContent = shown + (shown===1?' evento':' eventos');
+  });
+}
+
+document.querySelectorAll('.chip[data-sport]').forEach(chip => {
+  chip.addEventListener('click', () => {
+    const s = chip.dataset.sport;
+    if(active.has(s)){ active.delete(s); chip.setAttribute('aria-pressed','false'); }
+    else { active.add(s); chip.setAttribute('aria-pressed','true'); }
+    apply();
+  });
+});
+
+apply();
+</script>
+</body>
+</html>
